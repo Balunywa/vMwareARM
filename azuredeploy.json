@@ -1,188 +1,31 @@
-
 {
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "machines_TEAM_0_APP_SERVER_00_name": {
-            "defaultValue": "TEAM-0-APP-SERVER-00",
+        "VirtualMachineTemplates_WINDOWS_VM_AZURE_ARM_name": {
+            "defaultValue": "WINDOWS-VM-AZURE-ARM",
+            "type": "String"
+        },
+        "VCenters_Home_DC_01_vCenter_Server_externalid": {
+            "defaultValue": "/subscriptions/c8bc39b5-8f1b-4d8e-92e3-35e2a5bb8c31/resourceGroups/Arc-vSphere-Home-vCenter-Server/providers/Microsoft.ConnectedVMwarevSphere/VCenters/Home-DC-01-vCenter-Server",
             "type": "String"
         }
     },
     "variables": {},
     "resources": [
         {
-            "type": "Microsoft.HybridCompute/machines",
-            "apiVersion": "2023-06-20-preview",
-            "name": "[parameters('machines_TEAM_0_APP_SERVER_00_name')]",
+            "type": "Microsoft.ConnectedVMwarevSphere/VirtualMachineTemplates",
+            "apiVersion": "2022-07-15-preview",
+            "name": "[parameters('VirtualMachineTemplates_WINDOWS_VM_AZURE_ARM_name')]",
             "location": "eastus",
-            "kind": "VMware",
-            "identity": {
-                "type": "SystemAssigned"
+            "extendedLocation": {
+                "type": "CustomLocation",
+                "name": "/subscriptions/c8bc39b5-8f1b-4d8e-92e3-35e2a5bb8c31/resourcegroups/arc-vsphere-home-vcenter-server/providers/microsoft.extendedlocation/customlocations/azure-vcenter-resources"
             },
             "properties": {
-                "osType": "windows",
-                "osProfile": {
-                    "windowsConfiguration": {
-                        "patchSettings": {
-                            "assessmentMode": "AutomaticByPlatform"
-                        }
-                    }
-                },
-                "vmId": "e1f1a115-8edd-44c9-80d9-b02baa0697f9",
-                "mssqlDiscovered": "true",
-                "cloudMetadata": {},
-                "detectedProperties": {
-                    "cloudprovider": "N/A",
-                    "coreCount": "4",
-                    "logicalCoreCount": "4",
-                    "manufacturer": "VMware, Inc.",
-                    "model": "VMware Virtual Platform",
-                    "mssqldiscovered": "true",
-                    "processorCount": "2",
-                    "processorNames": "Intel(R) Core(TM) i7-3770 CPU @ 3.40GHz",
-                    "productType": "8",
-                    "serialNumber": "None",
-                    "smbiosAssetTag": "No Asset Tag",
-                    "totalPhysicalMemoryInBytes": "9537847296",
-                    "totalPhysicalMemoryInGigabytes": "8"
-                },
-                "agentConfiguration": {},
-                "serviceStatuses": {
-                    "extensionService": {
-                        "status": "running",
-                        "startupType": "automatic"
-                    },
-                    "guestConfigurationService": {
-                        "status": "running",
-                        "startupType": "automatic"
-                    }
-                },
-                "agentUpgrade": {
-                    "enableAutomaticUpgrade": false
-                },
-                "networkProfile": {
-                    "networkInterfaces": [
-                        {
-                            "ipAddresses": [
-                                {
-                                    "address": "192.168.3.110",
-                                    "ipAddressVersion": "IPv4",
-                                    "subnet": {
-                                        "addressPrefix": "192.168.3.0/24"
-                                    }
-                                }
-                            ]
-                        }
-                    ]
-                },
-                "licenseProfile": {
-                    "esuProfile": {
-                        "licenseAssignmentState": "NotAssigned"
-                    }
-                }
-            }
-        },
-        {
-            "type": "Microsoft.HybridCompute/machines/extensions",
-            "apiVersion": "2023-06-20-preview",
-            "name": "[concat(parameters('machines_TEAM_0_APP_SERVER_00_name'), '/IaaSAntimalware')]",
-            "location": "eastus",
-            "dependsOn": [
-                "[resourceId('Microsoft.HybridCompute/machines', parameters('machines_TEAM_0_APP_SERVER_00_name'))]"
-            ],
-            "properties": {
-                "publisher": "Microsoft.Azure.Security",
-                "type": "IaaSAntimalware",
-                "typeHandlerVersion": "1.7.0.42",
-                "autoUpgradeMinorVersion": false,
-                "enableAutomaticUpgrade": true,
-                "settings": {
-                    "AntimalwareEnabled": true,
-                    "RealTimeProtectionEnabled": true,
-                    "ScheduledScanSettings": {},
-                    "Exclusions": {}
-                },
-                "instanceView": {
-                    "name": "IaaSAntimalware",
-                    "type": "IaaSAntimalware",
-                    "typeHandlerVersion": "1.7.0.42",
-                    "status": {
-                        "code": "0",
-                        "level": "Information",
-                        "message": "Extension Message: Microsoft Antimalware enabled"
-                    }
-                }
-            }
-        },
-        {
-            "type": "Microsoft.HybridCompute/machines/extensions",
-            "apiVersion": "2023-06-20-preview",
-            "name": "[concat(parameters('machines_TEAM_0_APP_SERVER_00_name'), '/MicrosoftMonitoringAgent')]",
-            "location": "eastus",
-            "dependsOn": [
-                "[resourceId('Microsoft.HybridCompute/machines', parameters('machines_TEAM_0_APP_SERVER_00_name'))]"
-            ],
-            "properties": {
-                "publisher": "Microsoft.EnterpriseCloud.Monitoring",
-                "type": "MicrosoftMonitoringAgent",
-                "typeHandlerVersion": "1.0.18069.0",
-                "autoUpgradeMinorVersion": false,
-                "enableAutomaticUpgrade": true,
-                "settings": {
-                    "workspaceId": "2179c9d7-baaf-49a3-b98a-261cef266586"
-                },
-                "instanceView": {
-                    "name": "MicrosoftMonitoringAgent",
-                    "type": "MicrosoftMonitoringAgent",
-                    "typeHandlerVersion": "1.0.18069.0",
-                    "status": {
-                        "code": "0",
-                        "level": "Information",
-                        "message": "Extension Message: Latest configuration has been applied to the Microsoft Monitoring Agent."
-                    }
-                }
-            }
-        },
-        {
-            "type": "Microsoft.HybridCompute/machines/extensions",
-            "apiVersion": "2023-06-20-preview",
-            "name": "[concat(parameters('machines_TEAM_0_APP_SERVER_00_name'), '/WindowsOsUpdateExtension')]",
-            "location": "eastus",
-            "dependsOn": [
-                "[resourceId('Microsoft.HybridCompute/machines', parameters('machines_TEAM_0_APP_SERVER_00_name'))]"
-            ],
-            "properties": {
-                "publisher": "Microsoft.SoftwareUpdateManagement",
-                "type": "WindowsOsUpdateExtension",
-                "typeHandlerVersion": "1.0.16.0",
-                "autoUpgradeMinorVersion": false,
-                "enableAutomaticUpgrade": true,
-                "settings": {
-                    "updateConfiguration": {}
-                },
-                "instanceView": {
-                    "name": "WindowsOsUpdateExtension",
-                    "type": "WindowsOsUpdateExtension",
-                    "typeHandlerVersion": "1.0.16.0",
-                    "status": {
-                        "code": "0",
-                        "level": "Information",
-                        "message": "Extension Message: Assessment operation with activity id 70b4a361-5568-4526-9323-0fa97294c0d4 completed successfully. 7 patches were found. , OperationResult: {\"activityId\":\"70b4a361-5568-4526-9323-0fa97294c0d4\",\"inputStartTime\":\"2023-11-13T20:38:22Z\",\"lastModifiedTime\":\"2023-11-13T20:39:20Z\",\"extensionTriggerTime\":\"2023-11-13T20:38:42Z\",\"action\":\"Assessment\",\"actionStatus\":\"success\",\"patchServiceUsed\":\"WU\",\"assessmentDetails\":{\"rebootPending\":false,\"countByCategory\":{\"critical\":0,\"security\":1,\"updateRollup\":1,\"featurePack\":0,\"servicePack\":0,\"definition\":1,\"tools\":0,\"updates\":4,\"other\":0},\"totalCount\":7,\"patches\":\"xdVdb9Q4FAbgv2LNVSvVI3/FH71ryyIhBEJtFyQQF3Z8TC0ycddJplut+O97Jm1hBhVKV6gr5SI5duzkyWvnwz+L6TL6EV7ExeEiCe0ZU5py4J4qyRpqjZKUu9aJVjLX+GZxsOj9CrD3n/ONJJVKTmFV1r4jJZGjWAKQ550fLsibzl9DnXu8y30sVwM5g7rGkmDczfW/taLBDxDJcD2MsBrI3stj1RjTWL2Pc30O85PdVrDQ4shDTrn1Yy79sDj8cPsgw+IjtuLJp1IzbBrwukIoZTyGC7/OpeJAJ74/hb8mGMbTuQlHvJxCl4cLiM/w5vM8v5tgglMmKNfnXBwyhsd77LoaansG+AJ5vF4c9lPXfTnYEbQOOBfCUKN5QEGnaUjSUGm8CFrx5K36JngzCydbkg87nW07WSeY3XGaK0/sJClzj3OSWmmLUFQ1rKXKOUNdioFizfDYSMtA7DgJ/BrkZFpNHb7PGu7I3lRYZ7iaiZav/zgnzyveclXqZyKXzQFRS7MUxPcRz+xDwBvShuH302aL9LbylKRijl7zOFIAkIFJSQNGgKqoLfURx5G4eK0EYURw30jvGF75Lre5TAhS0njlK3xdzOeldDMLJetmybnd+FjHrGRbPDeFn+mclq6bLn8zEW5KDI/HEbXJ8ibJQI1XjKqA69Ry3N+Md230bZtcE3dSt5nlntT9xrRJXARiJ21z5SnT9p8og+AxWrQLjCGlAYuUxtHEUgpcNdK5rV/FGbTTZijyoh+h6/In6NsdzVe5rWXABJJnkKCPaHXUI3mumExKXh4LXIIat4C9t1AH9CB8qRhfNlov2T72OJlqhX4kJxe+76Eje8e1+LgFezvA/bA4ae7z5vKXbF9vZG5Yh5+6csrl41xNEk1sW4ubvZEYUSOoVclQz7UNmnvUDb8a0fvCt8ctc/s//qVs8ic1/y6RWLkf7u7D/j+R/Pgv\",\"action\":\"Assessment\"},\"topLevelStatusMessage\":\"Assessment operation with activity id 70b4a361-5568-4526-9323-0fa97294c0d4 completed successfully. 7 patches were found. \",\"internalErrorMessage\":\"\",\"topLevelStatus\":0,\"logs\":\"i44FAA==\",\"errorCount\":0,\"failureRetryCount\":0,\"retriggerCount\":0,\"sequenceNumber\":0,\"errors\":null}"
-                    }
-                }
-            }
-        },
-        {
-            "type": "Microsoft.HybridCompute/machines/licenseProfiles",
-            "apiVersion": "2023-06-20-preview",
-            "name": "[concat(parameters('machines_TEAM_0_APP_SERVER_00_name'), '/default')]",
-            "location": "eastus",
-            "dependsOn": [
-                "[resourceId('Microsoft.HybridCompute/machines', parameters('machines_TEAM_0_APP_SERVER_00_name'))]"
-            ],
-            "properties": {
-                "provisioningState": "Succeeded",
-                "esuProfile": {}
+                "vCenterId": "[parameters('VCenters_Home_DC_01_vCenter_Server_externalid')]",
+                "inventoryItemId": "[concat(parameters('VCenters_Home_DC_01_vCenter_Server_externalid'), '/InventoryItems/vmtpl-vm-1071')]",
+                "moRefId": "vm-1071"
             }
         }
     ]
