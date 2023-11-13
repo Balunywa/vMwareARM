@@ -1,9 +1,10 @@
+
 {
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
         "machines_TEAM_0_APP_SERVER_00_name": {
-            "defaultValue": "TEAM-0-APP-SERVER-01",
+            "defaultValue": "TEAM-0-APP-SERVER-06",
             "type": "String"
         }
     },
@@ -27,7 +28,6 @@
                         }
                     }
                 },
-                "vmId": "e1f1a115-8edd-44c9-80d9-b02baa0697f9",
                 "mssqlDiscovered": "true",
                 "cloudMetadata": {},
                 "detectedProperties": {
