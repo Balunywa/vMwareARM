@@ -1,10 +1,9 @@
-
 {
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "virtualMachineName": {
-            "defaultValue": "MyDeployedVM",
+        "VirtualMachineTemplateName": {
+            "defaultValue": "WINDOWS-VM-AZURE-ARM",
             "type": "String"
         },
         "vCenterServerResourceId": {
@@ -15,7 +14,11 @@
             "defaultValue": "/subscriptions/c8bc39b5-8f1b-4d8e-92e3-35e2a5bb8c31/resourcegroups/arc-vsphere-home-vcenter-server/providers/microsoft.extendedlocation/customlocations/azure-vcenter-resources",
             "type": "String"
         },
-        "templateMoRefId": {
+        "inventoryItemId": {
+            "defaultValue": "vmtpl-vm-1071",
+            "type": "String"
+        },
+        "moRefId": {
             "defaultValue": "vm-1071",
             "type": "String"
         }
@@ -25,7 +28,7 @@
         {
             "type": "Microsoft.ConnectedVMwarevSphere/virtualMachines",
             "apiVersion": "2022-07-15-preview",
-            "name": "[parameters('virtualMachineName')]",
+            "name": "[parameters('VirtualMachineTemplateName')]",
             "location": "eastus",
             "extendedLocation": {
                 "type": "CustomLocation",
@@ -33,24 +36,9 @@
             },
             "properties": {
                 "vCenterId": "[parameters('vCenterServerResourceId')]",
-                "templateId": "[concat(parameters('vCenterServerResourceId'), '/virtualMachineTemplates/WINDOWS-VM-AZURE-ARM')]",
-                "resourcePoolId": "[concat(parameters('vCenterServerResourceId'), '/resourcePools/YourResourcePoolId')]", // Replace with actual Resource Pool ID
-                "folderPath": "HOME-DC-001/Arc", // Adjust if necessary
-                "numCPUs": 2,
-                "numCoresPerSocket": 2,
-                "memorySizeMB": 4096,
-                "osType": "Windows",
-                "disks": [
-                    {
-                        // Disk details here if needed
-                    }
-                ],
-                "networkInterfaces": [
-                    {
-                        // Network interface details here if needed
-                    }
-                ],
-                "moRefId": "[parameters('templateMoRefId')]"
+                "templateId": "[concat(parameters('vCenterServerResourceId'), '/VirtualMachineTemplates/', parameters('inventoryItemId'))]",
+                "resourcePoolId": "[concat(parameters('vCenterServerResourceId'), '/resourcePools/ResourcePool-1')]", // Replace with actual Resource Pool ID
+                "moRefId": "[parameters('moRefId')]"
             }
         }
     ]
