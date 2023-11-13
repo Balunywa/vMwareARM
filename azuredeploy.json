@@ -2,30 +2,83 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "VirtualMachineTemplates_WINDOWS_VM_AZURE_ARM_name": {
-            "defaultValue": "WINDOWS-VM-AZURE-ARM",
-            "type": "String"
-        },
-        "VCenters_Home_DC_01_vCenter_Server_externalid": {
-            "defaultValue": "/subscriptions/c8bc39b5-8f1b-4d8e-92e3-35e2a5bb8c31/resourceGroups/Arc-vSphere-Home-vCenter-Server/providers/Microsoft.ConnectedVMwarevSphere/VCenters/Home-DC-01-vCenter-Server",
+        "machines_TEAM_0_APP_SERVER_00_name": {
+            "defaultValue": "TEAM-0-APP-SERVER-01",
             "type": "String"
         }
     },
     "variables": {},
     "resources": [
         {
-            "type": "Microsoft.ConnectedVMwarevSphere/VirtualMachineTemplates",
-            "apiVersion": "2022-07-15-preview",
-            "name": "[parameters('VirtualMachineTemplates_WINDOWS_VM_AZURE_ARM_name')]",
+            "type": "Microsoft.HybridCompute/machines",
+            "apiVersion": "2023-06-20-preview",
+            "name": "[parameters('machines_TEAM_0_APP_SERVER_00_name')]",
             "location": "eastus",
-            "extendedLocation": {
-                "type": "CustomLocation",
-                "name": "/subscriptions/c8bc39b5-8f1b-4d8e-92e3-35e2a5bb8c31/resourcegroups/arc-vsphere-home-vcenter-server/providers/microsoft.extendedlocation/customlocations/azure-vcenter-resources"
+            "kind": "VMware",
+            "identity": {
+                "type": "SystemAssigned"
             },
             "properties": {
-                "vCenterId": "[parameters('VCenters_Home_DC_01_vCenter_Server_externalid')]",
-                "inventoryItemId": "[concat(parameters('VCenters_Home_DC_01_vCenter_Server_externalid'), '/InventoryItems/vmtpl-vm-1071')]",
-                "moRefId": "vm-1071"
+                "osType": "windows",
+                "osProfile": {
+                    "windowsConfiguration": {
+                        "patchSettings": {
+                            "assessmentMode": "AutomaticByPlatform"
+                        }
+                    }
+                },
+                "vmId": "e1f1a115-8edd-44c9-80d9-b02baa0697f9",
+                "mssqlDiscovered": "true",
+                "cloudMetadata": {},
+                "detectedProperties": {
+                    "cloudprovider": "N/A",
+                    "coreCount": "4",
+                    "logicalCoreCount": "4",
+                    "manufacturer": "VMware, Inc.",
+                    "model": "VMware Virtual Platform",
+                    "mssqldiscovered": "true",
+                    "processorCount": "2",
+                    "processorNames": "Intel(R) Core(TM) i7-3770 CPU @ 3.40GHz",
+                    "productType": "8",
+                    "serialNumber": "None",
+                    "smbiosAssetTag": "No Asset Tag",
+                    "totalPhysicalMemoryInBytes": "9537847296",
+                    "totalPhysicalMemoryInGigabytes": "8"
+                },
+                "agentConfiguration": {},
+                "serviceStatuses": {
+                    "extensionService": {
+                        "status": "running",
+                        "startupType": "automatic"
+                    },
+                    "guestConfigurationService": {
+                        "status": "running",
+                        "startupType": "automatic"
+                    }
+                },
+                "agentUpgrade": {
+                    "enableAutomaticUpgrade": false
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "ipAddresses": [
+                                {
+                                    "address": "192.168.3.170",
+                                    "ipAddressVersion": "IPv4",
+                                    "subnet": {
+                                        "addressPrefix": "192.168.3.0/24"
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "licenseProfile": {
+                    "esuProfile": {
+                        "licenseAssignmentState": "NotAssigned"
+                    }
+                }
             }
         }
     ]
