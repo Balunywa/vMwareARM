@@ -1,4 +1,3 @@
-
 {
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
@@ -22,6 +21,14 @@
         "moRefId": {
             "defaultValue": "vm-1071",
             "type": "String"
+        },
+        "hostId": {
+            "type": "String",
+            "defaultValue": "192.168.3.50"
+        },
+        "datastoreName": {
+            "type": "String",
+            "defaultValue": "datastore1"
         }
     },
     "variables": {},
@@ -38,7 +45,8 @@
             "properties": {
                 "vCenterId": "[parameters('vCenterServerResourceId')]",
                 "templateId": "[concat(parameters('vCenterServerResourceId'), '/VirtualMachineTemplates/', parameters('inventoryItemId'))]",
-                "resourcePoolId": "[concat(parameters('vCenterServerResourceId'), '/resourcePools/ResourcePool-1')]", // This is an example, replace with your actual resource pool ID
+                "hostId": "[concat(parameters('vCenterServerResourceId'), '/hosts/', parameters('hostId'))]",
+                "datastoreName": "[parameters('datastoreName')]",
                 "moRefId": "[parameters('moRefId')]"
             }
         }
