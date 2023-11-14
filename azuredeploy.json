@@ -21,6 +21,10 @@
         "moRefId": {
             "defaultValue": "vm-1071",
             "type": "String"
+        },
+        "resourcePoolId": {
+            "defaultValue": "/subscriptions/c8bc39b5-8f1b-4d8e-92e3-35e2a5bb8c31/resourceGroups/Arc-vSphere-Home-vCenter-Server/providers/Microsoft.ConnectedVMwarevSphere/ResourcePools/Resources",
+            "type": "String"
         }
     },
     "variables": {},
@@ -37,9 +41,10 @@
             "properties": {
                 "vCenterId": "[parameters('vCenterServerResourceId')]",
                 "templateId": "[concat(parameters('vCenterServerResourceId'), '/VirtualMachineTemplates/', parameters('inventoryItemId'))]",
-                "resourcePoolId": "[concat(parameters('vCenterServerResourceId'), '/resourcePools/ResourcePool-1')]", // Replace with actual Resource Pool ID
+                "resourcePoolId": "[parameters('resourcePoolId')]",
                 "moRefId": "[parameters('moRefId')]"
             }
         }
     ]
 }
+
