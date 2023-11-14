@@ -1,0 +1,123 @@
+
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "VirtualMachineTemplateName": {
+      "defaultValue": "WINDOWS-VM-AZURE-ARM",
+      "type": "String"
+    },
+    "vCenterServerResourceId": {
+      "defaultValue": "/subscriptions/c8bc39b5-8f1b-4d8e-92e3-35e2a5bb8c31/resourceGroups/Arc-vSphere-Home-vCenter-Server/providers/Microsoft.ConnectedVMwarevSphere/VCenters/Home-DC-01-vCenter-Server",
+      "type": "String"
+    },
+    "customLocationResourceId": {
+      "defaultValue": "/subscriptions/c8bc39b5-8f1b-4d8e-92e3-35e2a5bb8c31/resourcegroups/arc-vsphere-home-vcenter-server/providers/microsoft.extendedlocation/customlocations/azure-vcenter-resources",
+      "type": "String"
+    },
+    "inventoryItemId": {
+      "defaultValue": "vmtpl-vm-1071",
+      "type": "String"
+    },
+    "moRefId": {
+      "defaultValue": "vm-1071",
+      "type": "String"
+    },
+    "hostId": {
+      "defaultValue": "/subscriptions/c8bc39b5-8f1b-4d8e-92e3-35e2a5bb8c31/resourceGroups/Arc-vSphere-Home-vCenter-Server/providers/Microsoft.ConnectedVMwarevSphere/Hosts/192-168-3-50",
+      "type": "String"
+    }
+  },
+  "variables": {},
+  "resources": [
+    {
+      "type": "Microsoft.ConnectedVMwarevSphere/virtualMachines",
+      "apiVersion": "2022-07-15-preview",
+      "name": "[parameters('VirtualMachineTemplateName')]",
+      "location": "eastus",
+      "extendedLocation": {
+        "type": "CustomLocation",
+        "name": "[parameters('customLocationResourceId')]"
+      },
+      "properties": {
+        "vCenterId": "[parameters('vCenterServerResourceId')]",
+        "templateId": "[concat(parameters('vCenterServerResourceId'), '/VirtualMachineTemplates/', parameters('inventoryItemId'))]",
+        "moRefId": "[parameters('moRefId')]",
+        "placementProfile": {
+          "hostId": "[parameters('hostId')]"
+        },
+    
+        "kind": "string",
+        "identity": {
+          "type": "string"
+        },
+
+        "hardwareProfile": {
+          "memorySizeMB": 4096,
+          "numCoresPerSocket": 1,
+          "numCPUs": 1
+        },
+        "inventoryItemId": "[parameters('inventoryItemId')]",
+        "moRefId": "[parameters('moRefId')]",
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "deviceKey": 0,
+              "ipSettings": {
+                "allocationMethod": "string",
+                "dnsServers": [],
+                "gateway": [],
+                "ipAddress": "192.168.3.210",
+                "subnetMask": "192.168.3.0/24"
+              },
+              "name": "string",
+              "networkId": "string",
+              "nicType": "string",
+              "powerOnBoot": "string"
+            }
+          ]
+        },
+        "osProfile": {
+          "adminPassword": "Luq#123450",
+          "adminUsername": "bal",
+          "computerName": "string",
+          "guestId": "string",
+          "linuxConfiguration": {
+            "patchSettings": {
+              "assessmentMode": "string",
+              "patchMode": "string"
+            }
+          },
+          "osType": "string",
+          "windowsConfiguration": {
+            "patchSettings": {
+              "assessmentMode": "string",
+              "patchMode": "string"
+            }
+          }
+        },
+        "resourcePoolId": "string",
+        "securityProfile": {
+          "uefiSettings": {
+            "secureBootEnabled": false
+          }
+        },
+        "smbiosUuid": "string",
+        "storageProfile": {
+          "disks": [
+            {
+              "controllerKey": 0,
+              "deviceKey": 0,
+              "deviceName": "string",
+              "diskMode": "string",
+              "diskSizeGB": 32,
+              "diskType": "string",
+              "name": "string",
+              "unitNumber": 0
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
